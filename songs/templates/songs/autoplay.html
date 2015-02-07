@@ -1,19 +1,66 @@
 
 <html>
-<head><title>Play a YT video</title></head>
+<head><title>Group Vibrations</title></head>
 <body>
     <h1>{{ video_title }}</h1>
+    <!--
     <p>Video is {{ duration }} seconds long, even if you can't see it.</p>
+    -->
     <br><br>
-    <iframe width="0" height="0" <!-- because who needs to see their video -->
-    src="http://www.youtube.com/embed/{{ video_id }}?autoplay=1">
-    </iframe>
+    
+    <div id="player"></div>
+
+    <script>
+      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '0',
+          width: '0',
+          videoId: "{{ video_id }}?autoplay=1",
+          playerVars: {'autoplay': 1, 'controls': 0},
+          events: {
+            'onReady': onPlayerReady,
+          }
+        });
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          setTimeout(stopVideo, 6000);
+          done = true;
+        }
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
+    </script>
+
     <!-- the following lines are just notes to whomever reads this while I'm unconscious -->
+    <!--
     <br><br>
     <p>ok so as you can see this whole page is generated just off of a youtube url. The title of the video and duration are all calculated on the fly. The video is (almost) invisible. See index@/songs/views.py for how it's done. Check out the git to see what I've changed.</p>
     <p>also, soundcloud has a python api. as in "pip install soundcloud". I read through it a bit, and I'm not sure how useful it is, but it doesn't seem too hard to get started. If you want to register our app and get full dev access it doesn't seem too hard. we just have to give an app name and website and it seems like they'll give us a "client id", which is important.</p>
     <p>-Colin</p>
     <p> So After reading over the page the basic funtions are done, now its just a task to room creation and viewing the playlist live on this page. And the feature to move to next video after the video has finished</p>
     <p>-Sleappy Sean</p>
+    -->
 </body>
 </html>

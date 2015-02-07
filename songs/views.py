@@ -9,7 +9,6 @@ from django.core.urlresolvers import reverse
 from songs.models import Song, YTVid
 from songs.forms import SongForm
 
-
 # def index(request):
     # """List all songs and their info"""
     # song_list = Song.objects.all()
@@ -20,7 +19,7 @@ from songs.forms import SongForm
     
 def index(request):
     """Play a YT video"""
-    one_song = Song.objects.all()[0]
+    one_song = Song.objects.all()[3]
     Y = YTVid(one_song.songUrl) # remember, this is just Youtube vids now
     contextVars = {
         "video_title" : Y.title,
