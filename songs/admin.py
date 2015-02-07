@@ -1,6 +1,5 @@
 from django.contrib import admin
 from songs.models import Song, Playlist
-from songs.models import UserProfile
 
 # Register your models here.
 
@@ -12,4 +11,3 @@ class PlaylistAdmin(admin.ModelAdmin):
 
 admin.site.register(Song, SongAdmin)
 admin.site.register(Playlist, PlaylistAdmin)
-admin.site.register(UserProfile)
