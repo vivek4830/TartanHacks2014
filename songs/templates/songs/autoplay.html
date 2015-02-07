@@ -54,6 +54,8 @@
     {% else %}
         <p>Playlist empty. Maybe you should add something so the party doesn't get awkward.</p>
     {% endif %}
-    
+    <form action="/songs/addSong/">
+        <input type="submit" value="Add to current playlist">
+    </form>
   </body>
 </html>
