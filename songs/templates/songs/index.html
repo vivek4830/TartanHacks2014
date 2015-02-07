@@ -3,5 +3,12 @@
     <title>Group Vibrations Login</title>
     <body>
     <h1> Welcome to Group Vibrations!</h1>
+
+    <form action="/songs/index/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+    </form>
+
     </body>
 </html>

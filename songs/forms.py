@@ -7,4 +7,4 @@ class SongForm(forms.Form):
 	playlistPosition = forms.IntegerField()
 
 class PlaylistForm(forms.Form):
-	
+	playlistID = forms.IntegerField()

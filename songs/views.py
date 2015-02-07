@@ -6,23 +6,41 @@ from django.template import loader as templateLoader, RequestContext
 from django.shortcuts import render
 
 from songs.models import Song, YTVid
-from songs.forms import SongForm
+from songs.forms import SongForm, PlaylistForm
 
 def mainIndex(request):
-    """List all songs and their info"""
-    song_list = Song.objects.all()
-    song_list = Song.objects.all()[:5]
-    template = templateLoader.get_template("songs/index.html")
-    context = {"song_list" : song_list}
-    return render(request, "songs/index.html", context)
+    if request.method == 'POST':
+        form = PlaylistForm(request.POST)
+        if form.is_valid():
+            # Process form data
+            playlistID = form.cleaned_data['playlistID']
+            song_list = Song.objects.filter(playlistID__exact=playlistID,
+                                            playlistPosition__exact=0)
+            if (len(song_list) != 1):
+                print "Bad playlist ID or playlist index"
+                exit(1)
+            Y = YTVid(song_list[0].songUrl)
+            contextVars = {
+                "video_title" : Y.title,
+                "video_id"    : Y.id,
+            }
+            return render(request, "songs/autoplay.html", contextVars)
+    else:
+        form = PlaylistForm()
+
+    return render(request, 'songs/index.html', {'form':form})
 
 def index(request):
     """Play a YT video"""
-    one_song = Song.objects.all()[0]
-    Y = YTVid(one_song.songUrl) # remember, this is just Youtube vids now
+    playlistID = form.cleaned_data['playlistID']
+    song_list = Song.objects.filter(playlistID__exact=playlistID,
+                                    playlistPosition__exact=0)
+    if (len(song_list) != 1):
+        print "Bad playlist ID or playlist index"
+        exit(1)
+    Y = YTVid(song_list[0].songUrl)
     contextVars = {
         "video_title" : Y.title,
-        "duration"    : Y.length,
         "video_id"    : Y.id,
     }
     return render(request, "songs/autoplay.html", contextVars)
