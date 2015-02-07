@@ -64,11 +64,12 @@ def playlist(request, playlist_id, playlist_index):
     currentSong = prayrist[i-1] # zero-index
     Y = YTVid(currentSong.songUrl)
     contextVars = {
-        "video_title"    : Y.title,
-        "video_id"       : Y.id,
-        "playlist_id"    : playlist_id,
-        "next_track_num" : (i % len(songList))+1,
-        "song_list"      : songList
+        "video_title"      : Y.title,
+        "video_id"         : Y.id,
+        "playlist_id"      : playlist_id,
+        "current_position" : playlist_index,
+        "next_track_num"   : (i % len(songList))+1,
+        "song_list"        : songList
     }
     return render(request, "songs/autoplay.html", contextVars)
 
