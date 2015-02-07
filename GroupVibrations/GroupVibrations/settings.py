@@ -59,10 +59,10 @@ WSGI_APPLICATION = 'GroupVibrations.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE' : 'django.db.backends.sqlite3',
-        'NAME' : 'groupVibrations',
-        'OPTIONS': {'ssl': {'ca':'GroupVibrations/cleardb-ca.cer', 
-            'cert':'GroupVibrations/client-cert.cer', 
-            'key':'GroupVibrations/client-key-nopass.cer'},},
+        'NAME' :  os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'OPTIONS': {'ssl': {'ca':'GroupVibrations/cleardb-ca.cer', 
+        #    'cert':'GroupVibrations/client-cert.cer', 
+        #    'key':'GroupVibrations/client-key-nopass.cer'},},
     }
 }
 
@@ -71,7 +71,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'EST'
 
 USE_I18N = True
 
