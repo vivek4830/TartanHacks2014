@@ -9,5 +9,4 @@ class Song(models.Model):
     BUTTSXE = models.CharField(max_length = 69)<<<<<<< HEAD
     BUTTSXE = models.CharField(max_length = 69)
 =======
-	tempField2 = models.IntegerField(default = -1)
 >>>>>>> origin/master
