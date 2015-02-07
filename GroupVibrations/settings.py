@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -60,7 +60,7 @@ WSGI_APPLICATION = 'GroupVibrations.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE' : 'django.db.backends.sqlite3',
-        'NAME' :  os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME' :  os.path.join(PROJECT_ROOT, 'db.sqlite3'),
         #'OPTIONS': {'ssl': {'ca':'GroupVibrations/cleardb-ca.cer', 
         #    'cert':'GroupVibrations/client-cert.cer', 
         #    'key':'GroupVibrations/client-key-nopass.cer'},},
@@ -85,8 +85,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
 )
 
-STATIC_ROOT = '/static/'
+STATIC_ROOT = path.join(PROJECT_ROOT, 'static').replace('\\', '/')
 STATIC_URL = '/static/'
