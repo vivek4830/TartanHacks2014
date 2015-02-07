@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('songs', '0004_video'),
+        ('songs', '0003_auto_20150207_0329'),
     ]
 
     operations = [
@@ -24,8 +24,5 @@ class Migration(migrations.Migration):
             options={
             },
             bases=(models.Model,),
-        ),
-        migrations.DeleteModel(
-            name='Video',
         ),
     ]
