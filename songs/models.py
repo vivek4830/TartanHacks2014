@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 
 class Playlist(models.Model):
 	playlistID = models.IntegerField(default = 1)
