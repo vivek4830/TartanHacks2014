@@ -8,12 +8,17 @@ from songs.models import Song
 
 def index(request):
     """List all songs and their info"""
-    song_list = Song.objects
+    song_list = Song.objects.all()
     template = templateLoader.get_template("songs/index.html")
-    context = RequestContext(request, {
-        "song_list" : song_list,
-    })
-    return render(request, "polls/index.html", context)
+    context = {"song_list" : song_list}
+    return render(request, "songs/index.html", context)
 
 def playlist(request, playlist_id):
-	return HttpResponse("You're looking at the songs in playlist %s." % playlist_id)
+    """List all songs in the playlist. Takes playlist ID as second arg"""
+    song_list = Song.objects.filter(playlistID__exact=playlist_id)
+    template = templateLoader.get_template("songs/playlistList.html")
+    contextVars = {
+        "playlistID" : playlist_id,
+        "song_list"  : song_list
+    }
+    return render(request, "songs/playlistList.html", contextVars)
