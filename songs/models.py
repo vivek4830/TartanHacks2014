@@ -2,6 +2,7 @@ from django.db import models
 from django.forms import ModelForm
 
 import re, urllib2, urlparse
+from django.contrib.auth.models import User
 
 class YTVid(object):
     def __init__(self, url):
@@ -50,3 +51,15 @@ class Song(models.Model):
 	songUrl = models.CharField(max_length = 250)
 	playlistID = models.IntegerField(default = 1)
 	playlistPosition = models.IntegerField(default = 1)
+
+class UserProfile(models.Model):
+    # This line is required. Links UserProfile to a User model instance.
+    user = models.OneToOneField(User)
+
+    # The additional attributes we wish to include.
+    currentPlaylist = models.IntegerField(default = 1)
+    currentPosition = models.IntegerField(default = 1)
+
+    # Override the __unicode__() method to return out something meaningful!
+    def __unicode__(self):
+        return self.user.username

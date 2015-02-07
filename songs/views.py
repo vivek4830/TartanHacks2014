@@ -1,5 +1,5 @@
 
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template import loader as templateLoader, RequestContext
@@ -7,16 +7,16 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 
 from songs.models import Song, YTVid
-from songs.forms import SongForm
+from songs.forms import SongForm, UserForm
 
-# def index(request):
-    # """List all songs and their info"""
-    # song_list = Song.objects.all()
-    # song_list = Song.objects.all()[:5]
-    # template = templateLoader.get_template("songs/index.html")
-    # context = {"song_list" : song_list}
-    # return render(request, "songs/index.html", context)
-    
+def mainIndex(request):
+    """List all songs and their info"""
+    song_list = Song.objects.all()
+    song_list = Song.objects.all()[:5]
+    template = templateLoader.get_template("songs/index.html")
+    context = {"song_list" : song_list}
+    return render(request, "songs/index.html", context)
+
 def index(request):
     """Play a YT video"""
     one_song = Song.objects.all()[3]
@@ -54,3 +54,47 @@ def addSong(request):
 		form = SongForm()
 
 	return render(request, 'songs/addSong.html', {'form': form})
+
+def register(request):
+    # Like before, get the request's context.
+    context = RequestContext(request)
+
+    # A boolean value for telling the template whether the registration was successful.
+    # Set to False initially. Code changes value to True when registration succeeds.
+    registered = False
+
+    # If it's a HTTP POST, we're interested in processing form data.
+    if request.method == 'POST':
+        # Attempt to grab information from the raw form information.
+        # Note that we make use of both UserForm and UserProfileForm.
+        user_form = UserForm(data=request.POST)
+
+        # If the two forms are valid...
+        if user_form.is_valid():
+            # Save the user's form data to the database.
+            user = user_form.save()
+
+            # Now we hash the password with the set_password method.
+            # Once hashed, we can update the user object.
+            user.set_password(user.password)
+            user.save()
+
+            # Update our variable to tell the template registration was successful.
+            registered = True
+
+        # Invalid form or forms - mistakes or something else?
+        # Print problems to the terminal.
+        # They'll also be shown to the user.
+        else:
+            print user_form.errors
+
+    # Not a HTTP POST, so we render our form using two ModelForm instances.
+    # These forms will be blank, ready for user input.
+    else:
+        user_form = UserForm()
+
+    # Render the template depending on the context.
+    return render_to_response(
+            'songs/register.html',
+            {'user_form': user_form, 'registered': registered},
+            context)
