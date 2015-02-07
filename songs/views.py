@@ -78,14 +78,16 @@ def addSong(request):
         form = SongForm(request.POST)
         if form.is_valid():
             # Process form data from form.cleaned_data
+            newTrackNum = len(Song.objects.filter(playlistID__exact=form.cleaned_data['playlistID']))
             currentSong = Song()
             currentSong.songName = form.cleaned_data['songName']
             currentSong.songUrl = form.cleaned_data['songUrl']
             currentSong.playlistID = form.cleaned_data['playlistID']
-            currentSong.playlistPosition = form.cleaned_data['playlistPosition']
+            currentSong.playlistPosition = newTrackNum
             currentSong.save()
             pl_id = currentSong.playlistID
-            return HttpResponseRedirect("/songs/%d&tracknum=%d" % (pl_id, len(Song.objects.filter(playlistID__exact=pl_id))))
+            return HttpResponseRedirect("/songs/%d&tracknum=%d" %
+                                        (pl_id, newTrackNum))
     else:
         form = SongForm()
 
