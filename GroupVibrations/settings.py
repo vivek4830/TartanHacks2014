@@ -20,11 +20,11 @@ BASE_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 SECRET_KEY = 'lq!!p-^ty&xl3o-3gds_n#h!+$p$_70u4u0r=m%dgku(c6ba(!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 ADMIN_MEDIA_PREFIX = '/static/admin/' 
 

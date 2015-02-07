@@ -29,15 +29,20 @@ def index(request):
     }
     return render(request, "songs/autoplay.html", contextVars)
 
-def playlist(request, playlist_id):
-    """List all songs in the playlist. Takes playlist ID as second arg"""
-    song_list = Song.objects.filter(playlistID__exact=playlist_id)
-    template = templateLoader.get_template("songs/playlistList.html")
+def playlist(request, playlist_id, playlist_index):
+    """Process a playlist, starting with playlist_index"""
+    song_list = Song.objects.filter(playlistID__exact=playlist_id,
+                                    playlistPosition__exact=int(playlist_index))
+    if (len(song_list) != 1):
+        print "Bad playlist ID or playlist index"
+        exit(1)
+    
+    Y = YTVid(song_list[0].songUrl)
     contextVars = {
-        "playlistID" : playlist_id,
-        "song_list"  : song_list
+        "video_title" : Y.title,
+        "video_id"    : Y.id,
     }
-    return render(request, "songs/playlistList.html", contextVars)
+    return render(request, "songs/autoplay.html", contextVars)
 
 def addSong(request):
 	if request.method == 'POST':
