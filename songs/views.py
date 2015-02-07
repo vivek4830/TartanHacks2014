@@ -20,7 +20,7 @@ def mainIndex(request):
 
 def index(request):
     """Play a YT video"""
-    one_song = Song.objects.all()[3]
+    one_song = Song.objects.all()[0]
     Y = YTVid(one_song.songUrl) # remember, this is just Youtube vids now
     contextVars = {
         "video_title" : Y.title,

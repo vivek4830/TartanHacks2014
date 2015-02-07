@@ -26,6 +26,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+ADMIN_MEDIA_PREFIX = '/static/admin/' 
 
 # Application definition
 
