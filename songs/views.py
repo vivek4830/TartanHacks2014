@@ -28,7 +28,7 @@ def mainIndex(request):
                 "video_title" : Y.title,
                 "video_id"    : Y.id,
             }
-            return render(request, "songs/autoplay.html", contextVars)
+            return HttpResponseRedirect("/songs/%s&tracknum=1" % playlistID)
     else:
         form = PlaylistForm()
 
@@ -36,7 +36,6 @@ def mainIndex(request):
 
 def index(request):
     """Play a YT video"""
-    playlistID = form.cleaned_data['playlistID']
     song_list = Song.objects.filter(playlistID__exact=playlistID,
                                     playlistPosition__exact=0)
     if (len(song_list) != 1):
