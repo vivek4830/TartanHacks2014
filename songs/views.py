@@ -8,18 +8,27 @@ from django.shortcuts import render
 from songs.models import Song, YTVid
 from songs.forms import SongForm, PlaylistForm
 
+playlistID = 0
+
 def http_client_error(x):
     print x
     return None
 
 def mainIndex(request):
+    form = PlaylistForm()
+
+    return render(request, 'songs/index.html', {'form':form})
+
+def index(request):
+    """Play a YT video"""
     if request.method == 'POST':
         form = PlaylistForm(request.POST)
         if form.is_valid():
             # Process form data
             playlistID = form.cleaned_data['playlistID']
+            print "playlist ID is: ", playlistID
             song_list = Song.objects.filter(playlistID__exact=playlistID,
-                                            playlistPosition__exact=0)
+                                            playlistPosition__exact=1)
             if (len(song_list) != 1):
                 print "Bad playlist ID or playlist index"
                 exit(1)
@@ -30,23 +39,10 @@ def mainIndex(request):
             }
             return HttpResponseRedirect("/songs/%s&tracknum=1" % playlistID)
     else:
+        print "else"
         form = PlaylistForm()
 
-    return render(request, 'songs/index.html', {'form':form})
-
-def index(request):
-    """Play a YT video"""
-    song_list = Song.objects.filter(playlistID__exact=playlistID,
-                                    playlistPosition__exact=0)
-    if (len(song_list) != 1):
-        print "Bad playlist ID or playlist index"
-        exit(1)
-    Y = YTVid(song_list[0].songUrl)
-    contextVars = {
-        "video_title" : Y.title,
-        "video_id"    : Y.id,
-    }
-    return render(request, "songs/autoplay.html", contextVars)
+    return render(request, "songs/index.html", contextVars)
     
 def cmpPos(S1, S2):
     return cmp(S1.playlistPosition, S2.playlistPosition)
