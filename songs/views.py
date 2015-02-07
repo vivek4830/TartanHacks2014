@@ -8,6 +8,10 @@ from django.shortcuts import render
 from songs.models import Song, YTVid
 from songs.forms import SongForm, PlaylistForm
 
+def http_client_error(x):
+    print x
+    return None
+
 def mainIndex(request):
     if request.method == 'POST':
         form = PlaylistForm(request.POST)
@@ -44,35 +48,48 @@ def index(request):
         "video_id"    : Y.id,
     }
     return render(request, "songs/autoplay.html", contextVars)
-
+    
+def cmpPos(S1, S2):
+    return cmp(S1.playlistPosition, S2.playlistPosition)
+    
 def playlist(request, playlist_id, playlist_index):
     """Process a playlist, starting with playlist_index"""
-    song_list = Song.objects.filter(playlistID__exact=playlist_id,
-                                    playlistPosition__exact=int(playlist_index))
-    if (len(song_list) != 1):
-        print "Bad playlist ID or playlist index"
-        exit(1)
+    try:
+        i = int(playlist_index)
+    except:
+        http_client_error("Bad playlist index")
+        
+    prayrist = Song.objects.filter(playlistID__exact=playlist_id)
+    if not(len(prayrist)):
+        return http_client_error("Playlist empty")
+    if not((0 < i) and (i <= len(prayrist))):
+        return http_client_error("Bad playlist index")
     
-    Y = YTVid(song_list[0].songUrl)
+    songList = sorted(prayrist, cmpPos)
+    currentSong = prayrist[i-1] # zero-index
+    Y = YTVid(currentSong.songUrl)
     contextVars = {
-        "video_title" : Y.title,
-        "video_id"    : Y.id,
+        "video_title"    : Y.title,
+        "video_id"       : Y.id,
+        "playlist_id"    : playlist_id,
+        "next_track_num" : (i % len(songList))+1,
+        "song_list"      : songList
     }
     return render(request, "songs/autoplay.html", contextVars)
 
 def addSong(request):
-	if request.method == 'POST':
-		form = SongForm(request.POST)
-		if form.is_valid():
-			# Process form data from form.cleaned_data
-			currentSong = Song()
-			currentSong.songName = form.cleaned_data['songName']
-			currentSong.songUrl = form.cleaned_data['songUrl']
-			currentSong.playlistID = form.cleaned_data['playlistID']
-			currentSong.playlistPosition = form.cleaned_data['playlistPosition']
-			currentSong.save()
-			return HttpResponseRedirect("/songs/")
-	else:
-		form = SongForm()
+    if request.method == 'POST':
+        form = SongForm(request.POST)
+        if form.is_valid():
+            # Process form data from form.cleaned_data
+            currentSong = Song()
+            currentSong.songName = form.cleaned_data['songName']
+            currentSong.songUrl = form.cleaned_data['songUrl']
+            currentSong.playlistID = form.cleaned_data['playlistID']
+            currentSong.playlistPosition = form.cleaned_data['playlistPosition']
+            currentSong.save()
+            return HttpResponseRedirect("/songs/")
+    else:
+        form = SongForm()
 
-	return render(request, 'songs/addSong.html', {'form': form})
+    return render(request, 'songs/addSong.html', {'form': form})

@@ -19,8 +19,8 @@
       var player;
       function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-          height: '0',
-          width: '0',
+          height: '640',
+          width: '390',
           videoId: "{{ video_id }}",
           events: {
             'onReady': onPlayerReady,
@@ -43,5 +43,14 @@
         }
       }
     </script>
+    
+    {% if song_list %}
+        {% for song in song_list %}
+        <a href="{{ song.songUrl }}">{{ song.songName }}</a> at position {{ song.playlistPosition }} </br>
+        {% endfor %}
+    {% else %}
+        <p>Playlist empty. Maybe you should add something so the party doesn't get awkward.</p>
+    {% endif %}
+    
   </body>
 </html>
