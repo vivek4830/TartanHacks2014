@@ -1,0 +1,16 @@
+
+<html>
+<head><title>Play a YT video</title></head>
+<body>
+    <h1>{{ video_title }}</h1>
+    <p>Video is {{ duration }} seconds long, even if you can't see it.</p>
+    <br><br>
+    <iframe width="0" height="0" <!-- because who needs to see their video -->
+    src="http://www.youtube.com/embed/{{ video_id }}?autoplay=1">
+    </iframe>
+    <!-- the following lines are just notes to whomever reads this while I'm unconscious -->
+    <br><br>
+    <p>okso as you can see this whole page is generated just off of a youtube url. The title of the video and duration are all calculated on the fly. The video is (almost) invisible. See index@/songs/views.py for how it's done. Check out the git to see what I've changed.</p>
+    <p>-Colin</p>
+</body>
+</html>

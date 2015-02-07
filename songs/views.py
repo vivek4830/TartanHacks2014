@@ -6,16 +6,28 @@ from django.template import loader as templateLoader, RequestContext
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 
-from songs.models import Song
+from songs.models import Song, YTVid
 from songs.forms import SongForm
 
+
+# def index(request):
+    # """List all songs and their info"""
+    # song_list = Song.objects.all()
+    # song_list = Song.objects.all()[:5]
+    # template = templateLoader.get_template("songs/index.html")
+    # context = {"song_list" : song_list}
+    # return render(request, "songs/index.html", context)
+    
 def index(request):
-    """List all songs and their info"""
-    song_list = Song.objects.all()
-    song_list = Song.objects.all()[:5]
-    template = templateLoader.get_template("songs/index.html")
-    context = {"song_list" : song_list}
-    return render(request, "songs/index.html", context)
+    """Play a YT video"""
+    one_song = Song.objects.all()[0]
+    Y = YTVid(one_song.songUrl) # remember, this is just Youtube vids now
+    contextVars = {
+        "video_title" : Y.title,
+        "duration"    : Y.length,
+        "video_id"    : Y.id,
+    }
+    return render(request, "songs/autoplay.html", contextVars)
 
 def playlist(request, playlist_id):
     """List all songs in the playlist. Takes playlist ID as second arg"""
