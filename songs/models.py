@@ -6,3 +6,4 @@ class Song(models.Model):
 	songUrl = models.CharField(max_length = 250)
 	playlistID = models.IntegerField(default = -1)
 	playlistPosition = models.IntegerField(default = -1)
+	tempField2 = models.IntegerField(default = -1)
