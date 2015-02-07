@@ -1,0 +1,15 @@
+
+<html>
+    <title>A basic song list!</title>
+    <body>
+    {% if song_list %}
+        <ol>
+        {% for song in song_list %}
+            <li><a href="{{ song.songUrl }}">{{ song.songName }}</a></li>
+        {% endfor %}
+        </ol>
+    {% else %}
+        <p>Song list empty</p>
+    {% endif %}
+    </body>
+</html>
