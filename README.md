@@ -1,4 +1,4 @@
-# TartanHacks2014
+# TartanHacks2015
 Collaborative Music Playlist Web App
 
 This web application allows people to create, collaborate, and share music playlists. 
